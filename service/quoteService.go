@@ -20,12 +20,12 @@ type Quote struct {
 	QuoteLink   string `json:"quoteLink"`
 }
 
-func Test(c *gin.Context) {
-	q := Quote{
-		QuoteText: "Do you want to know who you are? Don't ask. Act! Action will delineate and define you.",
-	}
-	common.OK(c, q)
-}
+// func Test(c *gin.Context) {
+// 	q := Quote{
+// 		QuoteText: "Do you want to know who you are? Don't ask. Act! Action will delineate and define you.",
+// 	}
+// 	common.OK(c, q)
+// }
 
 func GetRandomQuote(c *gin.Context) {
 	key := c.DefaultQuery("key", "")
@@ -40,7 +40,7 @@ func GetRandomQuote(c *gin.Context) {
 		}
 	}
 
-	quote, err := getOneQuote(key)
+	quote, err := GetOneQuote(key)
 	if err != nil {
 		log.Println("get quote error", err)
 		common.InternalServerError(c, "get quote err")
@@ -49,7 +49,7 @@ func GetRandomQuote(c *gin.Context) {
 	common.OK(c, quote)
 }
 
-func getOneQuote(key string) (quote Quote, err error) {
+func GetOneQuote(key string) (quote Quote, err error) {
 	quoteServerUrl := viper.GetString("quoteServerUrl")
 	quoteMethod := viper.GetString("quoteMethod")
 	quoteFormat := viper.GetString("quoteFormat")
@@ -62,7 +62,7 @@ func getOneQuote(key string) (quote Quote, err error) {
 	if key != "" {
 		getQuoteUrl += "&key=" + key
 	}
-	fmt.Println("quoteServerUrl:", getQuoteUrl)
+	// log.Println("getQuoteUrl:", getQuoteUrl)
 	res, err := common.HttpGet(getQuoteUrl)
 	// _, err = strconv.Unquote(res) // doesn't work
 	err = jsoniter.UnmarshalFromString(res, &quote)
@@ -71,7 +71,6 @@ func getOneQuote(key string) (quote Quote, err error) {
 		if strings.Contains(err.Error(), "readEscapedChar") {
 			res = strings.ReplaceAll(res, "\\", "")
 		}
-		fmt.Println("new res:", res)
 		err = jsoniter.UnmarshalFromString(res, &quote)
 	}
 	return

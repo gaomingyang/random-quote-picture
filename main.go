@@ -22,7 +22,7 @@ func main() {
 	apiGroup.GET("/quote", service.GetRandomQuote)     // get a random quote
 	apiGroup.GET("/picture", service.GetRandomPicture) // get a random picture
 
-	apiGroup.GET("/test", service.Test) // test
+	// apiGroup.GET("/test", service.Test) // test
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

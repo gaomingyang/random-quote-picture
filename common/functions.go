@@ -36,7 +36,7 @@ func InternalServerError(c *gin.Context, message string) {
 
 func OK(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, define.Response{
-		Code:    http.StatusOK,
+		Code:    define.SUCCESSCODE,
 		Message: "success",
 		Data:    data,
 	})

@@ -15,7 +15,7 @@ type PictureUrlResponse struct {
 
 func GetRandomPicture(c *gin.Context) {
 	grayscale := c.DefaultQuery("grayscale", "")
-	pictureUrl, err := getPictureUrl(grayscale)
+	pictureUrl, err := GetPictureUrl(grayscale)
 	if err != nil {
 		log.Println("get picture error", err)
 		common.InternalServerError(c, "get picture err")
@@ -27,7 +27,7 @@ func GetRandomPicture(c *gin.Context) {
 	common.OK(c, res)
 }
 
-func getPictureUrl(grayscale string) (pictureUrl string, err error) {
+func GetPictureUrl(grayscale string) (pictureUrl string, err error) {
 	pictureServerUrl := viper.GetString("pictureServerUrl")
 	pictureWidth := viper.GetString("pictureWidth")
 	pictureHeight := viper.GetString("pictureHeight")

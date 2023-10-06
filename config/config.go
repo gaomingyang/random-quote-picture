@@ -9,7 +9,6 @@ import (
 )
 
 func Init(workPath string) {
-	log.Println("config init.")
 	configPath := filepath.Join(workPath, "conf/app.yaml")
 	err := initConfig(configPath)
 	if err != nil {
@@ -24,7 +23,7 @@ func initConfig(filepath string) error {
 	if err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// Config file not found; ignore error if desired
-			log.Printf("config file %s not exist", filepath)
+			panic(fmt.Errorf("config file %s not exist", filepath))
 		} else {
 			// Config file was found but another error was produced
 			panic(fmt.Errorf("fatal error config file: %w", err))
