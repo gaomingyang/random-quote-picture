@@ -7,17 +7,26 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"github.com/spf13/viper"
 	"log"
+	"math/rand"
 	"random-quote-picture/common"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Quote struct {
 	QuoteText   string `json:"quoteText"`
 	QuoteAuthor string `json:"quoteAuthor"`
-	SenderName  string `json:"senderName"`
-	SenderLink  string `json:"senderLink"`
+	SenderName  string `json:"senderName,omitempty"`
+	SenderLink  string `json:"senderLink,omitempty"`
 	QuoteLink   string `json:"quoteLink"`
+}
+
+var CachedQuotes map[string]Quote
+var CachedQuoteKeys []string
+
+func init() {
+	CachedQuotes = make(map[string]Quote)
 }
 
 // func Test(c *gin.Context) {
@@ -29,6 +38,7 @@ type Quote struct {
 
 func GetRandomQuote(c *gin.Context) {
 	key := c.DefaultQuery("key", "")
+	// check parameter
 	if key != "" {
 		if len(key) > 6 {
 			common.BadRequest(c, "key length can't more than 6")
@@ -40,15 +50,33 @@ func GetRandomQuote(c *gin.Context) {
 		}
 	}
 
+	// get quote data
 	quote, err := GetOneQuote(key)
 	if err != nil {
-		log.Println("get quote error", err)
-		common.InternalServerError(c, "get quote err")
-		return
+		log.Println("get quote from forismatic error", err)
+
+		// If forismatic is unvailable, get data from cache.
+		quote, err = GetQuoteFromCache()
+	} else {
+		// store quote data to cache
+		hashKey := common.GetHash(quote.QuoteText)
+		// length < 100 and key not exist
+		if len(CachedQuoteKeys) < 100 {
+			if _, ok := CachedQuotes[hashKey]; !ok {
+				CachedQuotes[hashKey] = quote
+				CachedQuoteKeys = append(CachedQuoteKeys, hashKey)
+			}
+		}
 	}
+
+	if err != nil {
+		common.InternalServerError(c, "get quote err")
+	}
+
 	common.OK(c, quote)
 }
 
+// GetOneQuote - get quote from forismatic (https://forismatic.com/en/api/)
 func GetOneQuote(key string) (quote Quote, err error) {
 	quoteServerUrl := viper.GetString("quoteServerUrl")
 	quoteMethod := viper.GetString("quoteMethod")
@@ -73,5 +101,23 @@ func GetOneQuote(key string) (quote Quote, err error) {
 		}
 		err = jsoniter.UnmarshalFromString(res, &quote)
 	}
+	return
+}
+
+// GetQuoteFromCache - this function will be called when forismatic api is unavailable
+func GetQuoteFromCache() (quote Quote, err error) {
+	n := len(CachedQuoteKeys)
+	if n < 1 {
+		err = errors.New("no cache quote")
+		return
+	}
+	rand.Seed(time.Now().UnixNano())
+	index := rand.Intn(n)
+	key := CachedQuoteKeys[index]
+	if key == "" {
+		err = errors.New("cached quote data error")
+		return
+	}
+	quote = CachedQuotes[key]
 	return
 }

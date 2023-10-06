@@ -13,6 +13,7 @@ type PictureUrlResponse struct {
 	PictureUrl string `json:"pictureUrl"`
 }
 
+// GetRandomPicture api
 func GetRandomPicture(c *gin.Context) {
 	grayscale := c.DefaultQuery("grayscale", "")
 	pictureUrl, err := GetPictureUrl(grayscale)
@@ -27,6 +28,7 @@ func GetRandomPicture(c *gin.Context) {
 	common.OK(c, res)
 }
 
+// GetPictureUrl - get picture from picsum (https://picsum.photos/)
 func GetPictureUrl(grayscale string) (pictureUrl string, err error) {
 	pictureServerUrl := viper.GetString("pictureServerUrl")
 	pictureWidth := viper.GetString("pictureWidth")
@@ -35,7 +37,8 @@ func GetPictureUrl(grayscale string) (pictureUrl string, err error) {
 		err = errors.New("picture config error")
 		return
 	}
-	pictureUrl = fmt.Sprintf("%s/%s/%s", pictureServerUrl, pictureWidth, pictureHeight)
+	seed := common.MakeUuid()
+	pictureUrl = fmt.Sprintf("%s/seed/%s/%s/%s", pictureServerUrl, seed, pictureWidth, pictureHeight)
 	if grayscale == "1" {
 		pictureUrl += "?grayscale"
 	}

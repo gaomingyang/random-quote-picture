@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"log"
 	"os"
 	"random-quote-picture/config"
 	"random-quote-picture/service"
@@ -13,6 +14,8 @@ func init() {
 		panic(err)
 	}
 	config.Init(workPath)
+	log.SetPrefix("[LOG] ")
+	log.SetFlags(log.Lshortfile | log.Lmicroseconds | log.Ldate)
 }
 
 func main() {
@@ -21,18 +24,14 @@ func main() {
 	apiGroup := router.Group("/api")
 	apiGroup.GET("/quote", service.GetRandomQuote)     // get a random quote
 	apiGroup.GET("/picture", service.GetRandomPicture) // get a random picture
-
 	// apiGroup.GET("/test", service.Test) // test
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
 	// web page
-	router.LoadHTMLGlob("public/*")
+
+	router.LoadHTMLGlob("public/*.html")
+	router.Static("/css", "./public/css")
 	router.GET("/", service.IndexPage)
 
-	router.Run(":8080") // listen and serve on 0.0.0.0:8080
+	// listen and serve on 0.0.0.0:8080
+	router.Run(":8080")
 }

@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
+body {
+    background-color: #f4f4f4;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+}
+h1{
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#quoteContainer {
+    display: flex;
+    justify-content: center;
+}
+#quoteBox{
+    border-radius: 4px;
+    width: 600px;
+    background-color: #fff;
+    padding: 30px;
+}
+#quoteInfo{
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+#quoteText{
+    font-weight: 500;
+    font-size: 24px;
+}
+#quoteAuthor{
+    text-align: right;
+    font-size: 20px;
+}
+#quoteLink{
+    text-align: right;
+}
+#quoteController{
+    text-align: center;
+}
+#quoteKey{
+
+}
+#pictureBox{
+    border-radius: 4px;
+    width: 600px;
+    background-color: #fff;
+    padding: 30px;
+}
+#pictureFrame{
+    height: 350px;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+}
+#pictureController{
+    text-align: center;
+}

@@ -2,8 +2,7 @@
 
 the [setup.md](setup.md) shows instructions on how to run and test this application
 
-本代码库用Golang和gin框架实现,由于功能比较简单只有一个简单的页面，就不做前后端分离了，直接后端全部实现。
-
+This project is implemented using Golang and the Gin framework. Due to its simplicity with only a single basic page, we did not opt for frontend-backend separate to different repository. Both the page and the API are provided through the backend web service.
 
 ## Tasks
 
@@ -15,7 +14,7 @@ the [setup.md](setup.md) shows instructions on how to run and test this applicat
 - Make it resilient to one or both providers being unavailable
 - Provide unit tests
 - Provide any documentation you think might be helpful
-- Feel free to add anythng that you think might be useful
+- Feel free to add anything that you think might be useful
 
 
 ## APIs to be Used

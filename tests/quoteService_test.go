@@ -16,6 +16,7 @@ func init() {
 	config.Init("../")
 }
 
+// test our api GetRandomQuote
 func TestGetRandomQuote(t *testing.T) {
 	r := gin.Default()
 	r.GET("/api/quote", service.GetRandomQuote)
@@ -54,6 +55,7 @@ func TestGetRandomQuote(t *testing.T) {
 	t.Log("GetRandomQuote PASSED.")
 }
 
+// test get quote from forismatic
 func TestGetOneQuote(t *testing.T) {
 	key := ""
 	quote, err := service.GetOneQuote(key)
@@ -68,6 +70,7 @@ func TestGetOneQuote(t *testing.T) {
 	t.Log("GetOneQuote PASSED.")
 }
 
+// benchmark test demo
 func BenchmarkGetOneQuote(b *testing.B) {
 	key := ""
 	for i := 0; i < b.N; i++ {

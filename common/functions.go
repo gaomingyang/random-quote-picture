@@ -1,10 +1,14 @@
 package common
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"io/ioutil"
 	"net/http"
 	"random-quote-picture/common/define"
+	"strings"
 )
 
 func HttpGet(url string) (res string, err error) {
@@ -17,6 +21,21 @@ func HttpGet(url string) (res string, err error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	res = string(body)
 	return
+}
+
+func GetHash(key string) string {
+	hasher := sha256.New()
+	hasher.Write([]byte(key))
+	hashBytes := hasher.Sum(nil)
+	hashString := hex.EncodeToString(hashBytes)
+	return hashString
+}
+
+func MakeUuid() string {
+	id := uuid.New()
+	s := id.String()
+	s = strings.ReplaceAll(s, "-", "")
+	return s
 }
 
 func CommonJSON(c *gin.Context, code int, message string) {
