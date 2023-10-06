@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"random-quote-picture/config"
 	"random-quote-picture/service"
 )
@@ -36,18 +37,29 @@ func main() {
 		quote, err := service.GetOneQuote(*key)
 		if err != nil {
 			fmt.Printf("Get Quote Error: %+v\n", err.Error())
+			quote, err = service.GetQuoteFromCache()
+		}
+		// if get quote from cache still error, stopped here.
+		if err != nil {
+			fmt.Printf("Get Quote Error: %+v\n", err.Error())
 			return
 		}
 		fmt.Println("======Quote======")
 		fmt.Printf("Text:%s\nAuthor:%s\nLink:%s\n", quote.QuoteText, quote.QuoteAuthor, quote.QuoteLink)
 		fmt.Println("=================")
 	} else if *category == "picture" {
-		// How to return an image on cli?
 		isGrayscale := *grayscale
-		fmt.Println("isGrayscale:", isGrayscale)
-
+		pictureURL, err := service.GetPictureUrl(isGrayscale)
+		if err != nil {
+			fmt.Printf("GetPictureURL Error: %+v\n", err)
+			return
+		}
+		if len(pictureURL) == 0 {
+			fmt.Printf("GetPictureURL Error, empty PictureURL")
+			return
+		}
+		showPicture(pictureURL)
 	}
-
 }
 
 func check(categoryName string) {
@@ -61,4 +73,16 @@ func check(categoryName string) {
 		fmt.Println("Wrong category value. Please provide the 'category' parameter, which can be either 'quote' or 'picture'.")
 		os.Exit(1)
 	}
+}
+
+func showPicture(pictureURL string) {
+	fmt.Println("show picture:", pictureURL)
+	cmd := exec.Command("open", pictureURL)
+	err := cmd.Run()
+	if err != nil {
+		fmt.Printf("open picture err:：%v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("picture opened")
 }

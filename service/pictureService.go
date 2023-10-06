@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"log"
+	"math/rand"
 	"random-quote-picture/common"
 )
 
@@ -43,4 +44,14 @@ func GetPictureUrl(grayscale string) (pictureUrl string, err error) {
 		pictureUrl += "?grayscale"
 	}
 	return
+}
+
+func GetBackupPicture(c *gin.Context) {
+	backupPictureUrls := viper.GetStringSlice("pictureBackupUrl")
+	index := rand.Intn(len(backupPictureUrls))
+	backupPictureUrl := backupPictureUrls[index]
+	res := PictureUrlResponse{
+		PictureUrl: backupPictureUrl,
+	}
+	common.OK(c, res)
 }

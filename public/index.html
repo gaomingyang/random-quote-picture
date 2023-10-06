@@ -33,7 +33,7 @@
                         <label for="quoteKey" class="col-sm-2 col-form-label col-form-label-sm">Key</label>
                         <div class="col-sm-6">
                             <input type="text" id="quoteKey" name="key" value="" placeholder="key" class="form-control form-control-sm">
-                            <small class="form-text text-muted">numeric,the maximum length 6</small>
+                            <small class="form-text text-muted">numeric,maximum length 6</small>
                         </div>
                         <div class="col-sm-4">
                             <button type="button" class="btn btn-primary" id="changeQuoteBtn">Change Quote</button>
@@ -60,6 +60,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row" id="byMark">
+        <a href="https://github.com/gaomingyang/random-quote-picture" target="_blank">by Mingyang</a>
     </div>
 
 </div>
@@ -88,6 +91,12 @@ $(document).ready(function (){
         }
         $("#picture").attr("src",pictureUrl)
     });
+
+    $("#picture").on("error",function (){
+        console.error("get picture error, try get picture from backup")
+        getBackupPicture();
+        return
+    })
 })
 
 function getQuote() {
@@ -152,6 +161,30 @@ function getPictureUrl() {
     });
 }
 
+// get a backup picture when Picsum image is unvailable
+function getBackupPicture() {
+    $.ajax({
+        url:"http://127.0.0.1:8080/api/backup-picture",
+        method: 'GET',
+        dataType: 'json',
+        success: function(res){
+            console.log("backup picture")
+            console.log(res)
+            if (res.code != 200) {
+                console.error(res)
+                if (res.message != "") {
+                    alert(res.message)
+                }
+                return
+            }
+
+            $("#picture").attr("src",res.data.pictureUrl)
+        },
+        error: function (res) {
+            console.error(res)
+        },
+    })
+}
 
 </script>
 

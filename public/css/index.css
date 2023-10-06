@@ -29,6 +29,7 @@ h1{
 #quoteText{
     font-weight: 500;
     font-size: 24px;
+
 }
 #quoteAuthor{
     text-align: right;
@@ -40,9 +41,7 @@ h1{
 #quoteController{
     text-align: center;
 }
-#quoteKey{
 
-}
 #pictureBox{
     border-radius: 4px;
     width: 600px;
@@ -57,4 +56,8 @@ h1{
 }
 #pictureController{
     text-align: center;
+}
+#byMark{
+    text-align: center;
+    margin-top: 20px;
 }
