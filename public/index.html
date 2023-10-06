@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>random-quote-picture</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <style type="text/css">
+        h1{
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #quoteInfo{
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #quoteController{
+            text-align: center;
+        }
+        #imageFrame{
+            height: 320px;
+            text-align: center;
+        }
+        #pictureController{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <h1>{{ .title }}</h1>
+
+    <div class="row ">
+        <div class="col-md-6 col-xs-12" id="quoteContainer">
+            <div id="quoteInfo">
+                <div id="quoteText"></div>
+                <div id="quoteAuthor"></div>
+                <div id="quoteLink"></div>
+            </div>
+            <div id="quoteController">
+                key: <input type="text" id="quoteKey" name="key" value="" placeholder="integer key"><br>
+                <button type="button" class="btn btn-primary" id="changeQuoteBtn">Change Quote</button>
+            </div>
+
+        </div>
+        <div class="col-md-6 col-xs-12" id="pictureContainer">
+            <div id="imageFrame">
+                <img src="" alt="random picture" id="picture">
+            </div>
+            <div id="pictureController">
+                <input type="checkbox" id="grayscale" name="grayscale" value="1">
+                <label for="grayscale">Grayscale</label><br>
+                <button class="btn btn-primary" type="button"  id="changePictureBtn">Change Picture</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+$(document).ready(function (){
+    getQuote();
+    getPictureUrl();
+
+    //change quote
+    $("#changeQuoteBtn").click(function (){
+        getQuote();
+    })
+
+    //change Picture
+    $("#changePictureBtn").click(function (){
+        getPictureUrl();
+    })
+})
+
+function getQuote() {
+    var url = "http://127.0.0.1:8080/api/quote"
+    var quoteKey = $("#quoteKey").val();
+    if (quoteKey!= "") {
+        url += '?key='+quoteKey
+    }
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json',
+        success: function(res){
+            console.log(res)
+            if (res.code != 200) {
+                console.error(res)
+                if (res.message != "") {
+                    alert(res.message)
+                }
+                return
+            }
+
+            $("#quoteText").html(res.data.quoteText);
+            $("#quoteLink").html('<a href="'+res.data.quoteLink+'" target="_blank">'+res.data.quoteLink+'</a>');
+            $("#quoteAuthor").html(res.data.quoteAuthor);
+        },
+        error: function (res) {
+            console.log("get quote error")
+            console.log(res)
+        }
+    });
+}
+
+function getPictureUrl() {
+    var url = "http://127.0.0.1:8080/api/picture"
+    if ($("#grayscale").is(":checked")) {
+        url += "?grayscale=1"
+    }
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json',
+        success: function(res){
+            console.log(res)
+            if (res.code != 200) {
+                console.error(res)
+                if (res.message != "") {
+                    alert(res.message)
+                }
+                return
+            }
+
+            $("#picture").attr("src",res.data.pictureUrl)
+        }
+    });
+}
+
+
+</script>
+
+</body>
+</html>

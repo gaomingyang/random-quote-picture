@@ -1,0 +1,13 @@
+# config file
+
+#get quote config. document: https://forismatic.com/en/api/
+quoteServerUrl: "http://api.forismatic.com/api/1.0/"
+quoteMethod: "getQuote"
+quoteFormat: "json"
+quoteLang: "en"
+
+
+#get picture
+pictureServerUrl: "https://picsum.photos"
+pictureWidth: "500"
+pictureHeight: "300"
