@@ -100,7 +100,7 @@ $(document).ready(function (){
 })
 
 function getQuote() {
-    var url = "http://127.0.0.1:8080/api/quote"
+    var url = "/api/quote"
     var quoteKey = $("#quoteKey").val();
     if (quoteKey!= "") {
         url += '?key='+quoteKey
@@ -132,7 +132,7 @@ function getQuote() {
 
 function getPictureUrl() {
     $("changePictureBtn").prop("disabled", true);
-    var url = "http://127.0.0.1:8080/api/picture"
+    var url = "/api/picture"
     if ($("#grayscale").is(":checked")) {
         url += "?grayscale=1"
     }
@@ -164,7 +164,7 @@ function getPictureUrl() {
 // get a backup picture when Picsum image is unvailable
 function getBackupPicture() {
     $.ajax({
-        url:"http://127.0.0.1:8080/api/backup-picture",
+        url:"/api/backup-picture",
         method: 'GET',
         dataType: 'json',
         success: function(res){

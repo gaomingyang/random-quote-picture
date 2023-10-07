@@ -1,6 +1,10 @@
 # random-quote-picture
 
-the [setup.md](setup.md) shows instructions on how to run and test this application
+This web application displays a random quote and a random picture.
+
+Online Demo: [random-quote-picture](https://random-quote-picture.gaomingyang.cn)  
+
+Run and test this application : [setup.md](setup.md) 
 
 This project is implemented using Golang and the Gin framework. Due to its simplicity with only a single basic page, we did not opt for frontend-backend separate to different repository. Both the page and the API are provided through the backend web service.
 
@@ -54,9 +58,9 @@ In production-level commercial projects, it is common to store images in object 
 ### 5.About Unit Testing
 Different teams have varying rules when it comes to this aspect. 
 
-For Golang projects, some may require placing test files in the same directory as the corresponding functional files, while others may prefer consolidating them in a centralized testing directory. 
+For Golang projects, some team may require placing test files in the same directory as the corresponding functional files, while others may prefer consolidating them in a centralized testing directory. 
 
-In this case, I've placed the unit test files in the "tests" directory at the project's root.
+In this project, I've placed the unit test files in the "tests" directory at the project's root.
 
 
 ## Tasks
